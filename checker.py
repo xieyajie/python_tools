@@ -16,8 +16,11 @@ reg_dic = {
     'errorWithNSError:': 'Use EMError +errorWithDomain:code:',
 }
 
-def log_warning(file_path, line_number, description):
+def log_error(file_path, line_number, description):
     print '{0}:{1}: error: {2}'.format(file_path, line_number, description)
+
+def log_warning(file_path, line_number, description):
+    print '{0}:{1}: warning: {2}'.format(file_path, line_number, description)
 
 def check_main(root_path):
     for root, dirs, files in os.walk(root_path):
