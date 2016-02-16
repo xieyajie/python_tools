@@ -39,7 +39,7 @@ def size(image=None):
     if image is None:
         return ret_size
     
-    return image.size()
+    return image.size
 
 
 # 拷贝
