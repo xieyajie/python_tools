@@ -6,78 +6,68 @@ import colorer, stringer
 
 
 # 打开
-def show(image_path=None):
+def open_image(image_path=None):
     if image_path is None or len(image_path) == 0:
-        return
-
+        return None
+    
     im = Image.open(image_path)
+    return im
+
+
+# 显示
+def show_image(image_path=None):
+    im = open_image(image_path)
     im.show()
+
 
 # 保存
 def save(image=None, to_path=None):
     if image is None or to_path is None or len(to_path) == 0:
         return
-
+    
     f, e = os.path.splitext(to_path)
     if e is None or len(e) == 0:
         image.save(to_path, "JPEG")
     else:
         image.save(to_path)
 
+
 # 大小
 def size(image=None):
     ret_size = (0, 0)
-
-    im = image
-    if type(image) is types.StringType:
-        im = Image.open(image)
-
+    
     if image is None:
         return ret_size
+    
+    return image.size()
 
-    return im.size()
 
 # 拷贝
 def copy(image=None):
-    im = image
-    if type(image) is types.StringType:
-        im = Image.open(image)
-
-    if im is None:
+    if image is None:
         return None
+    
+    return image.copy()
 
-    return im.copy()
 
 # 裁剪
 def crop(image=None, box=None):
     if image is None or box is None:
         return None
+    
+    return image.crop(box)
 
-    im = image
-    if type(image) is types.StringType:
-        im = Image.open(image)
-        if im is None:
-            return None
-
-    return im.crop(box)
 
 # 压缩
 def get_thumb(image=None, ratio=0.6):
     if ratio > 1:
         return image
-    if ratio <= 0:
+    if ratio <= 0 or image is None:
         return None
 
-    im = image
-    if type(image) is types.StringType:
-        im = Image.open(image)
+    w, h = image.size()
 
-    if im is None:
-        return None
-
-    w, h = im.size()
-
-    return im.thumbnail((w * ratio, h * ratio))
+return image.thumbnail((w * ratio, h * ratio))
 
 # # 合并
 # def paste(image=None, sub_image=None, origin=(0, 0)):
@@ -118,45 +108,35 @@ def get_thumb(image=None, ratio=0.6):
 #
 #     return im.paste(sub_im, box)
 
+
 # 添加文字
-def draw_text(image=None, text=None, origin=(0, 0), font=None):
+def draw_text(image=None, text=None, origin=(0, 0), font=None, fill='red'):
     if image is None or text is None or len(text) == 0:
         return None
+    
+    context = ImageDraw.Draw(image)
+    context.text(origin, text, font=font, fill=fill)
+    return image
 
-    im = image
-    if type(image) is types.StringType:
-        im = Image.open(image)
-        if im is None:
-            return None
-
-    context = ImageDraw.Draw(im)
-    context.text(origin, text, font=font)
-    return im
 
 # 旋转
 def rotate(image=None, rotate=0):
-    im = image
-    if type(image) is types.StringType:
-        im = Image.open(image)
-
-    if im is None:
+    
+    if image is None:
         return None
-
+    
     if rotate == 0:
-        return im
+        return image
+    
+    return image.rotate(rotate)
 
-    return im.rotate(rotate)
 
 # 转换色彩模式, mode: 'P'虚化,'L'或者'1'黑白,'LA'怀旧
 def convert(image=None, mode='P'):
-    im = image
-    if type(image) is types.StringType:
-        im = Image.open(image)
-
-    if im is None:
+    if image is None:
         return None
-
-    return im.convert(mode)
+    
+    return image.convert(mode)
 
 
 # 生成验证码图片:数字和字母
@@ -164,14 +144,14 @@ def verification_code(num=4, width=240, height=60, font_size=30):
     image = Image.new('RGB', (width, height), (255, 255, 255))
     font = ImageFont.truetype('Arial.ttf', font_size)
     draw = ImageDraw.Draw(image)
-
+    
     # 背景填充
     for x in range(width):
         for y in range(height):
             draw.point((x, y), colorer.randRGB(min=64))
 
-    # 文字
-    tw = width / num
+# 文字
+tw = width / num
     margin = (tw - font_size) / 2
     ty = (height - font_size) /2
     tx = margin
@@ -182,11 +162,12 @@ def verification_code(num=4, width=240, height=60, font_size=30):
         tx = tx + tw
         str = str + char
 
-    # 模糊效果
-    image = image.filter(ImageFilter.BLUR)
-
+# 模糊效果
+image = image.filter(ImageFilter.BLUR)
+    
     return (image, str)
 
 # 生成中文验证码
+
 
 
