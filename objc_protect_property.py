@@ -6,6 +6,7 @@ import re
 walk_path = './'
 class_super_dic = {}
 
+
 def log_error(file_path, line_number, description):
     print('{0}:{1}: error: {2}'.format(file_path, line_number, description))
 
@@ -19,6 +20,7 @@ def match_super_class(content):
         class_name = str[:index].strip()
         super_name = str[(index + 1):].strip()
         class_super_dic[class_name] = super_name
+
 
 def match_h_files(file_path):
     # 读取文件内容
@@ -34,6 +36,7 @@ def match_h_files(file_path):
         line_match = re.findall('\n', substring)
         line_number = len(line_match) + 1
         log_error(file_path, line_number, "不能在头文件中引用_Internal分类")
+
 
 # 匹配类名
 def match_class(content):
@@ -78,8 +81,6 @@ def match_m_files(file_paths):
                     line_match = re.findall('\n', substring)
                     line_number = len(line_match) + 1
                     log_error(m_file, line_number, "不能在.m文件中引用_Internal分类")
-
-
 
 
 def check_main(root_path):
