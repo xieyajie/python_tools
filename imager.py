@@ -1,7 +1,8 @@
 # coding = utf-8
 
+from PIL import Image, ImageDraw, ImageFont, ImageFilter
 import types, os
-from PIL import Image, ImageDraw, ImageFont
+import colorer, stringer
 
 
 # 打开
@@ -146,7 +147,7 @@ def rotate(image=None, rotate=0):
 
     return im.rotate(rotate)
 
-# 转换, mode: 'P'虚化,'L'或者'1'黑白,'LA'怀旧
+# 转换色彩模式, mode: 'P'虚化,'L'或者'1'黑白,'LA'怀旧
 def convert(image=None, mode='P'):
     im = image
     if type(image) is types.StringType:
@@ -157,8 +158,35 @@ def convert(image=None, mode='P'):
 
     return im.convert(mode)
 
+
 # 生成验证码图片:数字和字母
-def verification_code(num=4, width=240, height=60):
+def verification_code(num=4, width=240, height=60, font_size=30):
     image = Image.new('RGB', (width, height), (255, 255, 255))
-    font = ImageFont
+    font = ImageFont.truetype('Arial.ttf', font_size)
+    draw = ImageDraw.Draw(image)
+
+    # 背景填充
+    for x in range(width):
+        for y in range(height):
+            draw.point((x, y), colorer.randRGB(min=64))
+
+    # 文字
+    tw = width / num
+    margin = (tw - font_size) / 2
+    ty = (height - font_size) /2
+    tx = margin
+    str = ""
+    for t in range(num):
+        char = stringer.rand_choice()
+        draw.text((tx, ty), char, font=font, fill=colorer.randRGB(0, 100))
+        tx = tx + tw
+        str = str + char
+
+    # 模糊效果
+    image = image.filter(ImageFilter.BLUR)
+
+    return (image, str)
+
+# 生成中文验证码
+
 
