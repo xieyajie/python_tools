@@ -67,7 +67,7 @@ def get_thumb(image=None, ratio=0.6):
 
     w, h = image.size()
 
-return image.thumbnail((w * ratio, h * ratio))
+    return image.thumbnail((w * ratio, h * ratio))
 
 # # 合并
 # def paste(image=None, sub_image=None, origin=(0, 0)):
@@ -150,8 +150,8 @@ def verification_code(num=4, width=240, height=60, font_size=30):
         for y in range(height):
             draw.point((x, y), colorer.randRGB(min=64))
 
-# 文字
-tw = width / num
+    # 文字
+    tw = width / num
     margin = (tw - font_size) / 2
     ty = (height - font_size) /2
     tx = margin
@@ -162,8 +162,8 @@ tw = width / num
         tx = tx + tw
         str = str + char
 
-# 模糊效果
-image = image.filter(ImageFilter.BLUR)
+    # 模糊效果
+    image = image.filter(ImageFilter.BLUR)
     
     return (image, str)
 
