@@ -1,7 +1,8 @@
 # coding = utf-8
 
 import types, os
-from PIL import Image, ImageDraw
+from PIL import Image, ImageDraw, ImageFont
+
 
 # 打开
 def show(image_path=None):
@@ -77,24 +78,44 @@ def get_thumb(image=None, ratio=0.6):
 
     return im.thumbnail((w * ratio, h * ratio))
 
-# 粘贴
-def paste(image=None, sub_image=None, box=None):
-    if image is None or sub_image is None or box is None:
-        return None
-
-    im = image
-    if type(image) is types.StringType:
-        im = Image.open(image)
-        if im is None:
-            return None
-
-    sub_im = sub_image
-    if type(sub_image) is types.StringType:
-        sub_im = Image.open(sub_image)
-        if sub_im is None:
-            return None
-
-    return im.paste(sub_im, box)
+# # 合并
+# def paste(image=None, sub_image=None, origin=(0, 0)):
+#     if image is None or sub_image is None:
+#         return None
+#
+#     im = image
+#     if type(image) is types.StringType:
+#         im = Image.open(image)
+#         if im is None:
+#             return None
+#
+#     sub_im = sub_image
+#     if type(sub_image) is types.StringType:
+#         sub_im = Image.open(sub_image)
+#         if sub_im is None:
+#             return None
+#
+#     im_size = im.size
+#     sub_size = sub_im.size
+#     # 如果sub_image在image范围内,不需要创建新的图片
+#     if origin[0] >= 0 and origin[1] >= 0:
+#         right = origin[0] + sub_size[0]
+#         bottom = origin[1] + sub_size[1]
+#         if right <= im.size[0] and bottom <= im_size[1]:
+#             return im.paste(sub_im, (origin(0), origin(1), right, bottom))
+#
+#     right = im_size(0)
+#     if im_size(0) < sub_size(0):
+#         width = sub_size(0)
+#     height = im_size(1)
+#     if im_size(1) < sub_size(1):
+#         height = sub_size(1)
+#
+#
+#     image = Image.new('RGB', (width, height), (255, 255, 255))
+#
+#
+#     return im.paste(sub_im, box)
 
 # 添加文字
 def draw_text(image=None, text=None, origin=(0, 0), font=None):
@@ -135,3 +156,9 @@ def convert(image=None, mode='P'):
         return None
 
     return im.convert(mode)
+
+# 生成验证码图片:数字和字母
+def verification_code(num=4, width=240, height=60):
+    image = Image.new('RGB', (width, height), (255, 255, 255))
+    font = ImageFont
+
